@@ -27,4 +27,28 @@ void Loader::load_textures() {
         }
     }
 }
+
+void Loader::load_music() {
+    while (!music_queue.empty()) {
+        const auto pair = music_queue.front();
+        music_queue.pop();
+
+        const auto identifier = pair.first;
+        const auto path = pair.second;
+
+        music[identifier] = std::make_unique<sf::Music>();
+
+        if (!music[identifier]->openFromFile(path)) {
+            throw std::runtime_error("Unable to load " + path);
+        }
+    }
+}
+
+Loader *Loader::add_music(const std::string &identifier,
+                          const std::string &path) {
+    music_queue.push(std::make_pair(identifier, path));
+}
+sf::Music *Loader::get_music(const std::string &filename) const {
+    return music.at(filename).get();
+}
 }

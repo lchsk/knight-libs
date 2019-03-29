@@ -18,6 +18,17 @@ TEST(TestLoader, test_load_textures) {
     ASSERT_THROW(loader->get_texture("doesnt_exist"), std::out_of_range);
 }
 
+TEST(TestLoader, test_load_music) {
+    auto loader = std::make_unique<K::Loader>();
+
+    loader->add_music("music_1", "../tests/assets/click.ogg");
+    loader->load_music();
+
+    ASSERT_EQ(loader->get_music("music_1")->getStatus(), sf::SoundSource::Status::Stopped);
+
+    ASSERT_THROW(loader->get_music("doesnt_exist"), std::out_of_range);
+}
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
 
