@@ -21,12 +21,29 @@ TEST(TestLoader, test_load_textures) {
 TEST(TestLoader, test_load_music) {
     auto loader = std::make_unique<K::Loader>();
 
-    loader->add_music("music_1", "../tests/assets/click.ogg");
+    loader
+        ->add_music("music_1", "../tests/assets/click.ogg")
+        ->add_music("music_2", "../tests/assets/click.ogg");
     loader->load_music();
 
     ASSERT_EQ(loader->get_music("music_1")->getStatus(), sf::SoundSource::Status::Stopped);
+    ASSERT_EQ(loader->get_music("music_2")->getStatus(), sf::SoundSource::Status::Stopped);
 
     ASSERT_THROW(loader->get_music("doesnt_exist"), std::out_of_range);
+}
+
+TEST(TestLoader, test_load_fonts) {
+    auto loader = std::make_unique<K::Loader>();
+
+    loader
+        ->add_font("font_1", "../tests/assets/DejaVuSans.ttf")
+        ->add_font("font_2", "../tests/assets/DejaVuSans.ttf");
+    loader->load_fonts();
+
+    ASSERT_EQ(loader->get_font("font_1").getInfo().family, "DejaVu Sans");
+    ASSERT_EQ(loader->get_font("font_2").getInfo().family, "DejaVu Sans");
+
+    ASSERT_THROW(loader->get_font("doesnt_exist"), std::out_of_range);
 }
 
 int main(int argc, char **argv) {
