@@ -1,6 +1,12 @@
 #include "loader.hpp"
 
 namespace K {
+void Loader::load() {
+    load_textures();
+    load_music();
+    load_fonts();
+}
+
 Loader *Loader::add_texture(const std::string &identifier,
                             const std::string &path) {
     textures_queue.push(std::make_pair(identifier, path));

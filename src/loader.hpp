@@ -10,6 +10,8 @@
 namespace K {
 class Loader {
   public:
+    void load();
+
     void load_textures();
     Loader *add_texture(const std::string &, const std::string &);
     const sf::Texture &get_texture(const std::string &filename) const;
