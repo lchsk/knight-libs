@@ -9,6 +9,15 @@ Animation::Animation(const std::vector<const sf::Texture *> &textures) {
     init();
 }
 
+Animation::Animation(const K::Loader &loader,
+                     const std::vector<std::string> &identifiers) {
+    for (const auto &identifier : identifiers) {
+        frames.push_back(sf::Sprite(*loader.get_texture(identifier)));
+    }
+
+    init();
+}
+
 K::Animation::Status Animation::get_status() const { return status; }
 
 bool Animation::is_visible() const { return visible; }

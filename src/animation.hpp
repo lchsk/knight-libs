@@ -4,6 +4,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "loader.hpp"
+
 namespace K {
 class Animation {
   public:
@@ -14,6 +16,7 @@ class Animation {
     };
 
     Animation(const std::vector<const sf::Texture *> &);
+    Animation(const K::Loader &, const std::vector<std::string> &);
 
     void render(sf::RenderWindow &window);
     void update(const sf::Time &delta);
