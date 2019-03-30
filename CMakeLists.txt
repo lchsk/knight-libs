@@ -29,7 +29,7 @@ set(CMAKE_CXX_STANDARD 17)
 # file(GLOB SOURCES "src/*.hpp" "src/*.cpp")
 
 # Executable name
-add_executable(example_animation examples/animation.cpp)
+add_executable(example_animation examples/animation.cpp src/animation.cpp src/loader.cpp)
 
 
 ############################################
