@@ -32,6 +32,29 @@ TEST(TestLoader, test_load_music) {
     ASSERT_THROW(loader->get_music("doesnt_exist"), std::out_of_range);
 }
 
+TEST(TestLoader, test_load_sounds) {
+    auto loader = std::make_unique<K::Loader>();
+
+    loader
+        ->add_sound_buffer("sound_1", "../tests/assets/click.ogg")
+        ->add_sound_buffer("sound_2", "../tests/assets/click.ogg");
+    loader->load_sound_buffers();
+
+    ASSERT_EQ(loader->get_sound("sound_1")->getStatus(), sf::SoundSource::Status::Stopped);
+    ASSERT_EQ(loader->get_sound("sound_2")->getStatus(), sf::SoundSource::Status::Stopped);
+
+    // Insert additional sound with the same sound buffer as sound_1
+    loader->insert_sound("sound_1", "other_sound_1");
+    loader->get_sound("other_sound_1")->setVolume(0);
+
+    ASSERT_EQ(loader->get_sound("other_sound_1")->getStatus(), sf::SoundSource::Status::Stopped);
+
+    // Remains unchanged
+    ASSERT_EQ(loader->get_sound("sound_1")->getVolume(), 100);
+
+    ASSERT_THROW(loader->get_music("doesnt_exist"), std::out_of_range);
+}
+
 TEST(TestLoader, test_load_fonts) {
     auto loader = std::make_unique<K::Loader>();
 
