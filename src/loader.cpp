@@ -15,8 +15,8 @@ Loader *Loader::add_texture(const std::string &identifier,
     return this;
 }
 
-const sf::Texture &Loader::get_texture(const std::string &filename) const {
-    return *textures.at(filename);
+const sf::Texture *Loader::get_texture(const std::string &filename) const {
+    return textures.at(filename).get();
 }
 
 void Loader::load_textures() {

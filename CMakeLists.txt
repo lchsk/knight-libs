@@ -26,10 +26,10 @@ endif()
 set(CMAKE_CXX_STANDARD 17)
 
 # Source code files, all .hpp and .cpp files from src/ directory are included
-file(GLOB SOURCES "src/*.hpp" "src/*.cpp")
+# file(GLOB SOURCES "src/*.hpp" "src/*.cpp")
 
 # Executable name
-# add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(example_animation examples/animation.cpp)
 
 
 ############################################
@@ -43,21 +43,21 @@ find_package(PkgConfig)
 pkg_check_modules(PKG_CONFIG "pkg-config")
 
 pkg_check_modules(SFML sfml-all REQUIRED)
-# include_directories(
-  # ${SFML_INCLUDE_DIRS}
-  # )
+include_directories(
+  ${SFML_INCLUDE_DIRS}
+  )
 
-# link_directories(
-  # ${SFML_LIBRARY_DIRS}
-  # )
+link_directories(
+  ${SFML_LIBRARY_DIRS}
+  )
 
-# add_definitions(
-  # ${SFML_CXXFLAGS_OTHER}
-  # )
+add_definitions(
+  ${SFML_CXXFLAGS_OTHER}
+  )
 
-# target_link_libraries(${PROJECT_NAME}
-  # ${SFML_LIBRARIES}
-  # )
+target_link_libraries(example_animation
+  ${SFML_LIBRARIES}
+  )
 
 
 ############################################
@@ -75,12 +75,23 @@ add_executable(test_loader
   ../src/loader.cpp
   )
 
-add_test(NAME
-  test_knight_libs
-  COMMAND ./test_loader
+add_executable(test_animation
+  tests/test_animation.cpp
+  ../src/loader.cpp
+  ../src/animation.cpp
   )
 
+# add_test(NAME
+  # test_knight_libs
+  # COMMAND ./test_loader
+  # )
+
 target_link_libraries(test_loader
+  ${GTEST_LIBRARIES}
+  ${SFML_LIBRARIES}
+  )
+
+target_link_libraries(test_animation
   ${GTEST_LIBRARIES}
   ${SFML_LIBRARIES}
   )

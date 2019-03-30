@@ -14,7 +14,7 @@ class Loader {
 
     void load_textures();
     Loader *add_texture(const std::string &, const std::string &);
-    const sf::Texture &get_texture(const std::string &filename) const;
+    const sf::Texture *get_texture(const std::string &filename) const;
 
     void load_fonts();
     Loader *add_font(const std::string &, const std::string &);

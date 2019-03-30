@@ -12,8 +12,8 @@ TEST(TestLoader, test_load_textures) {
 
     loader->load_textures();
 
-    ASSERT_EQ(loader->get_texture("image_1").getSize(), sf::Vector2u(32, 32));
-    ASSERT_EQ(loader->get_texture("image_2").getSize(), sf::Vector2u(32, 32));
+    ASSERT_EQ(loader->get_texture("image_1")->getSize(), sf::Vector2u(32, 32));
+    ASSERT_EQ(loader->get_texture("image_2")->getSize(), sf::Vector2u(32, 32));
 
     ASSERT_THROW(loader->get_texture("doesnt_exist"), std::out_of_range);
 }
