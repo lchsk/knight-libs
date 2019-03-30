@@ -75,7 +75,7 @@ void Animation::stop() {
 }
 
 void Animation::render(sf::RenderWindow &window) {
-    if (visible && status == Status::Playing) {
+    if (visible) {
         window.draw(frames[current_frame]);
     }
 }
@@ -86,13 +86,14 @@ void Animation::update(const sf::Time &delta) {
 
     if ((since_update - delta).asSeconds() > (delta.asSeconds() / speed)) {
         if (current_frame >= frames_count() - 1) {
-            current_frame = 0;
-
-            if (!loop) {
+            if (loop) {
+                current_frame = 0;
+            } else {
                 status = Status::Stopped;
             }
-        } else
+        } else {
             current_frame++;
+        }
 
         since_update = sf::seconds(0);
     } else {
