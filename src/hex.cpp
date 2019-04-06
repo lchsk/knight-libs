@@ -16,6 +16,10 @@ Point const Hex::to_pixel(Layout const &layout) const {
     return Point(x + origin.x, y + origin.y);
 }
 
+    bool Hex::operator==(Hex const &rhs) const {
+        return EQUAL_DOUBLE(q, rhs.q) && EQUAL_DOUBLE(r, rhs.r) && EQUAL_DOUBLE(s, rhs.s);
+    }
+
 Hex &Hex::operator+=(const Hex &rhs) {
     q += rhs.q;
     r += rhs.r;

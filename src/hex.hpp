@@ -6,6 +6,8 @@
 #define K_PI 3.14159265358979323846
 #endif
 
+#define EQUAL_DOUBLE(a, b) (abs(a - b) < 0.00001)
+
 namespace K {
 
 struct Point {
@@ -48,9 +50,7 @@ struct Hex {
 
     Point const to_pixel(Layout const &layout) const;
 
-    bool operator==(Hex const &rhs) const {
-        return q == rhs.q && r == rhs.r && s == rhs.s;
-    }
+    bool operator==(Hex const &rhs) const;
 
     Hex &operator+=(const Hex &rhs);
     Hex operator+(const Hex &rhs);
