@@ -1,10 +1,7 @@
 #pragma once
 
 #include <cmath>
-
-#ifndef K_PI
-#define K_PI 3.14159265358979323846
-#endif
+#include <vector>
 
 #define EQUAL_DOUBLE(a, b) (abs(a - b) < 0.00001)
 
@@ -48,7 +45,10 @@ struct Hex {
             throw "q + r + s must be 0";
     }
 
-    Point const to_pixel(Layout const &layout) const;
+    Point const to_point(Layout const &layout) const;
+    void to_int();
+    Hex lerp(const Hex &, double) const;
+    const std::vector<Hex> path_to(const Hex &) const;
 
     bool operator==(Hex const &rhs) const;
 
@@ -68,6 +68,7 @@ struct Hex {
     Hex direction(int) const;
     Hex neighbor(int) const;
     Hex diagonal_neighbor(int) const;
+    const std::vector<Point> polygon_corners(Layout const &layout) const;
 
     inline static const K::Orientation ORIENTATION_POINTY =
         K::Orientation(sqrt(3.0), sqrt(3.0) / 2.0, 0.0, 3.0 / 2.0,
@@ -75,6 +76,9 @@ struct Hex {
     inline static const K::Orientation ORIENTATION_FLAT =
         K::Orientation(3.0 / 2.0, 0.0, sqrt(3.0) / 2.0, sqrt(3.0), 2.0 / 3.0,
                        0.0, -1.0 / 3.0, sqrt(3.0) / 3.0, 0.0);
+
+    static Hex from_point(Layout const &layout, const Point &p);
+    static Point corner_offset(Layout const &layout, int corner);
 
     double q;
     double r;
