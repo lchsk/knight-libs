@@ -42,6 +42,57 @@ Hex Hex::operator-(const Hex &rhs) {
     return *this;
 }
 
+void Hex::scale(int k) {
+    q *= k;
+    r *= k;
+    s *= k;
+}
+
+void Hex::rotate_left() {
+    int q_ = q;
+
+    q = -s;
+    s = -r;
+    r = -q;
+}
+
+void Hex::rotate_right() {
+    int q_ = q;
+
+    q = -r;
+    r = -s;
+    s = -q_;
+}
+
+int Hex::length() const { return int((abs(q) + abs(r) + abs(s)) / 2.0); }
+
+int Hex::distance(const Hex &h) const {
+    auto copy = *this;
+    copy -= h;
+
+    return copy.length();
+}
+
+Hex Hex::direction(int d) const { return K::directions[d]; }
+
+Hex Hex::neighbor(int d) const {
+    auto const &direction_hex = direction(d);
+
+    Hex h = *this;
+    h += direction_hex;
+
+    return h;
+}
+
+Hex Hex::diagonal_neighbor(int d) const {
+    auto const &direction_hex = diagonals[d];
+
+    Hex h = *this;
+    h += direction_hex;
+
+    return h;
+}
+
 std::ostream &operator<<(std::ostream &os, Hex const &h) {
     return os << "(" << h.q << ", " << h.r << ", " << h.s << ")";
 }

@@ -58,6 +58,17 @@ struct Hex {
     Hex &operator-=(const Hex &rhs);
     Hex operator-(const Hex &rhs);
 
+    void scale(int k);
+    void rotate_left();
+    void rotate_right();
+
+    int length() const;
+    int distance(const Hex &h) const;
+
+    Hex direction(int) const;
+    Hex neighbor(int) const;
+    Hex diagonal_neighbor(int) const;
+
     inline static const K::Orientation ORIENTATION_POINTY =
         K::Orientation(sqrt(3.0), sqrt(3.0) / 2.0, 0.0, 3.0 / 2.0,
                        sqrt(3.0) / 3.0, -1.0 / 3.0, 0.0, 2.0 / 3.0, 0.5);
@@ -69,6 +80,13 @@ struct Hex {
     int r;
     int s;
 };
+
+static const K::Hex directions[] = {Hex(1, 0, -1), Hex(1, -1, 0),
+                                    Hex(0, -1, 1), Hex(-1, 0, 1),
+                                    Hex(-1, 1, 0), Hex(0, 1, -1)};
+static const K::Hex diagonals[] = {Hex(2, -1, -1), Hex(1, -2, 1),
+                                   Hex(-1, -1, 2), Hex(-2, 1, 1),
+                                   Hex(-1, 2, -1), Hex(1, 1, -2)};
 
 template <class T> inline void hash_combine(std::size_t &seed, const T &v) {
     std::hash<T> hasher;
