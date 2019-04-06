@@ -41,10 +41,6 @@ struct Layout {
 };
 
 struct Hex {
-    const int q;
-    const int r;
-    const int s;
-
     Hex(int q, int r, int s) : q(q), r(r), s(s) {
         if (q + r + s != 0)
             throw "q + r + s must be 0";
@@ -56,12 +52,22 @@ struct Hex {
         return q == rhs.q && r == rhs.r && s == rhs.s;
     }
 
+    Hex &operator+=(const Hex &rhs);
+    Hex operator+(const Hex &rhs);
+
+    Hex &operator-=(const Hex &rhs);
+    Hex operator-(const Hex &rhs);
+
     inline static const K::Orientation ORIENTATION_POINTY =
         K::Orientation(sqrt(3.0), sqrt(3.0) / 2.0, 0.0, 3.0 / 2.0,
                        sqrt(3.0) / 3.0, -1.0 / 3.0, 0.0, 2.0 / 3.0, 0.5);
     inline static const K::Orientation ORIENTATION_FLAT =
         K::Orientation(3.0 / 2.0, 0.0, sqrt(3.0) / 2.0, sqrt(3.0), 2.0 / 3.0,
                        0.0, -1.0 / 3.0, sqrt(3.0) / 3.0, 0.0);
+
+    int q;
+    int r;
+    int s;
 };
 
 template <class T> inline void hash_combine(std::size_t &seed, const T &v) {
