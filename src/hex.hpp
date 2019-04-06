@@ -41,8 +41,8 @@ struct Layout {
 };
 
 struct Hex {
-    Hex(int q, int r, int s) : q(q), r(r), s(s) {
-        if (q + r + s != 0)
+    Hex(double q, double r, double s) : q(q), r(r), s(s) {
+        if (round(q + r + s) != 0)
             throw "q + r + s must be 0";
     }
 
@@ -76,9 +76,9 @@ struct Hex {
         K::Orientation(3.0 / 2.0, 0.0, sqrt(3.0) / 2.0, sqrt(3.0), 2.0 / 3.0,
                        0.0, -1.0 / 3.0, sqrt(3.0) / 3.0, 0.0);
 
-    int q;
-    int r;
-    int s;
+    double q;
+    double r;
+    double s;
 };
 
 static const K::Hex directions[] = {Hex(1, 0, -1), Hex(1, -1, 0),
