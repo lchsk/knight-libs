@@ -1,4 +1,3 @@
 #include "hex_map.hpp"
 
-namespace K {
-}
+namespace K {}
