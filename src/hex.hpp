@@ -4,14 +4,20 @@
 #include <vector>
 
 #define EQUAL_DOUBLE(a, b) (abs(a - b) < 0.00001)
+#define IS_ZERO_DOUBLE(a) (abs(a) < 0.00001)
+#define NON_ZERO_DOUBLE(a) (!IS_ZERO_DOUBLE(a))
 
 namespace K {
 
 struct Point {
     Point(double x, double y);
+    Point();
 
-    const double x;
-    const double y;
+    bool operator==(Point const &rhs) const;
+    bool operator!=(Point const &rhs) const;
+
+    double x;
+    double y;
 };
 
 struct Orientation {

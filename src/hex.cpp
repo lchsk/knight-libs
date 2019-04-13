@@ -4,6 +4,11 @@
 
 namespace K {
 Point::Point(double x, double y) : x(x), y(y) {}
+Point::Point() : x(0), y(0) {}
+bool Point::operator==(Point const &rhs) const {
+    return EQUAL_DOUBLE(x, rhs.x) && EQUAL_DOUBLE(y, rhs.y);
+}
+bool Point::operator!=(Point const &rhs) const { return operator==(rhs); }
 
 Point const Hex::to_point(Layout const &layout) const {
     const Orientation &o = layout.orientation;
