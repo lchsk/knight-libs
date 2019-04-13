@@ -27,12 +27,14 @@ class HexCamera {
     void update(const sf::Vector2i &pos) {
         double dx = 0, dy = 0;
 
-        if (pos.x < (size.x * window_pct) && origin.x >= pos_min.x) {
+        if (pos.x < (size.x * window_pct) && pos.x > 0 &&
+            origin.x >= pos_min.x) {
             // Move left
             dx = -speed;
         }
 
-        if (pos.y < (size.y * window_pct) && origin.y > pos_min.y) {
+        if (pos.y < (size.y * window_pct) && pos.y > 0 &&
+            origin.y > pos_min.y) {
             // Move up
             dy = -speed;
         }
@@ -42,12 +44,14 @@ class HexCamera {
         const auto limit_y =
             HEX_MAP_LIMIT_CALC(pos_min.y, pos_max.y, size.y, speed, hex_size.y);
 
-        if (pos.x > (size.x * (1 - window_pct)) && origin.x < limit_x) {
+        if (pos.x > (size.x * (1 - window_pct)) && pos.x < size.x &&
+            origin.x < limit_x) {
             // Move right
             dx = speed;
         }
 
-        if (pos.y > (size.y * (1 - window_pct)) && origin.y < limit_y) {
+        if (pos.y > (size.y * (1 - window_pct)) && pos.y < size.y &&
+            origin.y < limit_y) {
             // Move down
             dy = speed;
         }
@@ -117,7 +121,9 @@ template <typename Node> class HexMap {
         window.setView(camera.get_view());
     }
 
+#ifdef KNIGHT_DEBUG
     void set_font(const sf::Font &font_) { font = font_; }
+#endif
 
     void update(const sf::Time &delta, const sf::Vector2i &pos) {
         camera.update(pos);
@@ -149,9 +155,11 @@ template <typename Node> class HexMap {
             }
         }
 
+#ifdef KNIGHT_DEBUG
         for (const auto &t : hex_positions) {
             window.draw(t);
         }
+#endif
     }
 
 #ifdef KNIGHT_DEBUG
