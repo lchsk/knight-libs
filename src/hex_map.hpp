@@ -19,10 +19,8 @@
 namespace K {
 class HexCamera {
   public:
-    HexCamera(K::Point origin, K::Point size, K::Point hex_size)
-        : origin(origin), size(size),
-          view(sf::FloatRect(origin.x, origin.y, size.x, size.y)),
-          refresh_view(false), hex_size(hex_size) {}
+    HexCamera(K::Point origin, K::Point size, K::Point hex_size, sf::View *view)
+        : origin(origin), size(size), view(view), hex_size(hex_size) {}
 
     void update(const sf::Vector2i &pos) {
         double dx = 0, dy = 0;
@@ -59,16 +57,11 @@ class HexCamera {
         if (NON_ZERO_DOUBLE(dx) or NON_ZERO_DOUBLE(dy)) {
             origin.x += dx;
             origin.y += dy;
-            view.move(dx, dy);
-            refresh_view = true;
+            view->move(dx, dy);
         }
     }
 
-    const sf::View &get_view() const { return view; }
-
-    bool needs_refresh() const { return refresh_view; }
-
-    void reset_refresh_status() { refresh_view = false; }
+    const sf::View &get_view() const { return *view; }
 
     const K::Point &get_pos_min() const { return pos_min; }
 
@@ -102,8 +95,7 @@ class HexCamera {
 
   private:
     K::Point pos_min, pos_max;
-    bool refresh_view;
-    sf::View view;
+    sf::View *view;
     K::Point origin;
     K::Point size;
     const K::Point hex_size;
@@ -114,8 +106,11 @@ class HexCamera {
 template <typename Node> class HexMap {
   public:
     HexMap<Node>(const K::Layout &layout, const K::HexCamera &camera,
-                 const K::Point hex_size)
-        : layout(layout), camera(camera), hex_size(hex_size){};
+                 const K::Point hex_size, sf::View *minimap)
+        : layout(layout), camera(camera), hex_size(hex_size), minimap(minimap) {
+        minimap->zoom(2);
+        minimap->setViewport(sf::FloatRect(0.75f, 0.f, 0.25f, 0.25f));
+    };
 
     void set_view(sf::RenderWindow &window) {
         window.setView(camera.get_view());
@@ -139,12 +134,7 @@ template <typename Node> class HexMap {
         }
     }
 
-    void render(sf::RenderWindow &window) {
-        if (camera.needs_refresh()) {
-            set_view(window);
-            camera.reset_refresh_status();
-        }
-
+    void draw_tiles(sf::RenderWindow &window) {
         const auto view = ecs::VectorView::create<Node>(system);
 
         for (ecs::Entity *e : view.entities()) {
@@ -154,12 +144,20 @@ template <typename Node> class HexMap {
                 anim.render(window);
             }
         }
+    }
+
+    void render(sf::RenderWindow &window) {
+        set_view(window);
+        draw_tiles(window);
 
 #ifdef KNIGHT_DEBUG
         for (const auto &t : hex_positions) {
             window.draw(t);
         }
 #endif
+
+        window.setView(*minimap);
+        draw_tiles(window);
     }
 
 #ifdef KNIGHT_DEBUG
@@ -227,6 +225,9 @@ template <typename Node> class HexMap {
     ecs::System system;
     std::vector<ecs::Entity> entities;
     K::HexCamera camera;
+
+    // TOOD: Move to GUI
+    sf::View *minimap;
 
 #ifdef KNIGHT_DEBUG
     sf::Font font;

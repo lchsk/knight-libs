@@ -18,7 +18,8 @@ Point const Hex::to_point(Layout const &layout) const {
     const double x = (o.f0 * q + o.f1 * r) * size.x;
     const double y = (o.f2 * q + o.f3 * r) * size.y;
 
-    return Point(static_cast<int>(x + origin.x), static_cast<int>(y + origin.y));
+    return Point(static_cast<int>(x + origin.x),
+                 static_cast<int>(y + origin.y));
 }
 
 bool Hex::operator==(Hex const &rhs) const {
