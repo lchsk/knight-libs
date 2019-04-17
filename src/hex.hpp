@@ -51,6 +51,8 @@ struct Hex {
             throw "q + r + s must be 0";
     }
 
+    Hex() : Hex(0, 0, 0) {}
+
     Point const to_point(Layout const &layout) const;
     void to_int();
     Hex lerp(const Hex &, double) const;

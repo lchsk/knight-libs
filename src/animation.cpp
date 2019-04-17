@@ -1,6 +1,7 @@
 #include "animation.hpp"
 
 namespace K {
+Animation::Animation() {}
 Animation::Animation(const std::vector<const sf::Texture *> &textures) {
     for (const auto texture : textures) {
         frames.push_back(sf::Sprite(*texture));
@@ -13,6 +14,16 @@ Animation::Animation(const K::Loader &loader,
                      const std::vector<std::string> &identifiers) {
     for (const auto &identifier : identifiers) {
         frames.push_back(sf::Sprite(*loader.get_texture(identifier)));
+    }
+
+    init();
+}
+
+Animation::Animation(const K::Loader &loader,
+                     const std::vector<std::string> &identifiers,
+                     const sf::IntRect &rect) {
+    for (const auto &identifier : identifiers) {
+        frames.push_back(sf::Sprite(*loader.get_texture(identifier), rect));
     }
 
     init();
@@ -63,6 +74,15 @@ void Animation::set_origin(double x, double y) {
     }
 }
 
+const K::Point Animation::get_sprite_size() const {
+    if (frames.empty()) {
+        throw "no frames in animation";
+    }
+
+    const auto bounds = frames[0].getLocalBounds();
+
+    return K::Point(bounds.width, bounds.height);
+}
 const sf::Vector2f &Animation::get_position() const { return position; }
 
 const sf::Vector2f &Animation::get_scale() const { return scale; }

@@ -6,6 +6,9 @@
 
 #include "loader.hpp"
 
+// TODO: Move Point etc outside of Hex
+#include "hex.hpp"
+
 namespace K {
 class Animation {
   public:
@@ -15,8 +18,11 @@ class Animation {
         Paused,
     };
 
+    Animation();
     Animation(const std::vector<const sf::Texture *> &);
     Animation(const K::Loader &, const std::vector<std::string> &);
+    Animation(const K::Loader &, const std::vector<std::string> &,
+              const sf::IntRect &);
 
     void render(sf::RenderWindow &window);
     void update(const sf::Time &delta);
@@ -24,6 +30,8 @@ class Animation {
     K::Animation::Status get_status() const;
     bool is_visible() const;
     void set_visible(bool);
+
+    const K::Point get_sprite_size() const;
 
     bool is_looping() const;
     void set_loop(bool);
