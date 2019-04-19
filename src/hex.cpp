@@ -1,4 +1,5 @@
 #include <fstream>
+#include <sstream>
 
 #include "hex.hpp"
 
@@ -10,6 +11,23 @@ bool Point::operator==(Point const &rhs) const {
 }
 bool Point::operator!=(Point const &rhs) const { return operator==(rhs); }
 
+const std::string Hex::to_float_str() const {
+    std::stringstream str;
+    str << std::fixed;
+    str.precision(2);
+
+    str << q << ", " << r << ", " << s;
+
+    return str.str();
+}
+
+const std::string Hex::to_str() const {
+    std::stringstream str;
+
+    str << q << ", " << r << ", " << s;
+
+    return str.str();
+}
 Point const Hex::to_point(Layout const &layout) const {
     const Orientation &o = layout.orientation;
     const Point &size = layout.size;

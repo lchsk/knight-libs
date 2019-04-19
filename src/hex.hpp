@@ -53,6 +53,9 @@ struct Hex {
 
     Hex() : Hex(0, 0, 0) {}
 
+    const std::string to_str() const;
+    const std::string to_float_str() const;
+
     Point const to_point(Layout const &layout) const;
     void to_int();
     Hex lerp(const Hex &, double) const;
