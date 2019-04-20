@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+#include <queue>
 #include <unordered_map>
 #include <vector>
 
@@ -23,6 +25,11 @@ struct Button : public Widget {
     std::unordered_map<std::string, K::Animation> animations;
     std::string active_animation;
 
+    // Time [s] after which next message appears
+    double rollover_time = -1;
+
+    bool clickable = true;
+
     bool mouse_pressed = false;
     bool mouse_hover = false;
     bool mouse_released = false;
@@ -45,9 +52,28 @@ struct Button : public Widget {
         update_text_position();
     }
 
+    void update_timer(const sf::Time &delta, const sf::Time &timer) {
+        if (rollover_time > 0) {
+            const auto d = std::fmod(timer.asSeconds(), rollover_time);
+
+            if (d + delta.asSeconds() >= rollover_time) {
+                if (messages.empty()) {
+                    set_text("");
+                } else {
+                    set_text(messages.front());
+                    messages.pop();
+                }
+            }
+        }
+    }
+
     void update(const sf::Time &delta, const sf::Vector2f &mouse_pos,
                 sf::Event &event) {
         animations[active_animation].update(delta);
+
+        if (!clickable) {
+            return;
+        }
 
         if (mouse_pressed and animations.find("pressed") != animations.end()) {
             active_animation = "pressed";
@@ -95,6 +121,8 @@ struct Button : public Widget {
         update_text_position();
     }
 
+    void enqueue_message(const std::string &str) { messages.push(str); }
+
   private:
     void update_text_position() {
         const auto &bounds = animations[active_animation].get_sprite_bounds();
@@ -112,6 +140,7 @@ struct Button : public Widget {
     }
 
     bool mouse_pressed_for_release = false;
+    std::queue<std::string> messages;
 };
 
 struct Grid {
@@ -147,15 +176,21 @@ class Gui {
   public:
     void update(const sf::Time &delta, const sf::Vector2f &mouse_pos,
                 sf::Event &event) {
+        timer += delta;
+
         const auto view = ecs::VectorView::create<Button>(system);
 
         for (ecs::Entity *e : view.entities()) {
             auto &widget = e->get<Button>();
 
-            widget->mouse_released = false;
-            widget->check_mouse_pressed(mouse_pos, event);
-            widget->check_mouse_hover(mouse_pos, event);
-            widget->check_mouse_released(mouse_pos, event);
+            if (widget->clickable) {
+                widget->mouse_released = false;
+                widget->check_mouse_pressed(mouse_pos, event);
+                widget->check_mouse_hover(mouse_pos, event);
+                widget->check_mouse_released(mouse_pos, event);
+            }
+
+            widget->update_timer(delta, timer);
 
             widget->update(delta, mouse_pos, event);
         }
@@ -178,6 +213,8 @@ class Gui {
 
         auto b = get_button(identifier);
         b->active_animation = "default";
+
+        b->set_text("");
     }
 
     void set_button_style(const std::string &identifier,
@@ -199,5 +236,6 @@ class Gui {
     K::Grid grid;
 
   private:
+    sf::Time timer;
 };
 }
