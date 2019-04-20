@@ -108,9 +108,6 @@ template <typename Node> class HexMap {
     HexMap<Node>(const K::Layout &layout, const K::HexCamera &camera,
                  const K::Point hex_size, sf::View *minimap)
         : layout(layout), camera(camera), hex_size(hex_size), minimap(minimap) {
-        // TODO: Move to GUI
-        minimap->zoom(2);
-        minimap->setViewport(sf::FloatRect(0.75f, 0.f, 0.25f, 0.25f));
     };
 
     K::Point get_hex_middle(const K::Hex &hex) const {
@@ -157,7 +154,6 @@ template <typename Node> class HexMap {
     }
 
     void render(sf::RenderWindow &window) {
-        set_view(window);
         draw_tiles(window);
 
 #ifdef KNIGHT_DEBUG
@@ -165,12 +161,6 @@ template <typename Node> class HexMap {
             window.draw(t);
         }
 #endif
-
-        window.setView(*minimap);
-        draw_tiles(window);
-
-        // Reset back to the main view
-        set_view(window);
     }
 
 #ifdef KNIGHT_DEBUG
@@ -245,7 +235,6 @@ template <typename Node> class HexMap {
     std::vector<ecs::Entity> entities;
     K::HexCamera camera;
 
-    // TOOD: Move to GUI
     sf::View *minimap;
 
 #ifdef KNIGHT_DEBUG

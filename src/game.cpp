@@ -20,4 +20,12 @@ sf::View *Game::get_minimap_view() const { return minimap_view.get(); }
 sf::View *Game::get_main_view() const { return main_view.get(); }
 
 sf::View *Game::get_gui_view() const { return gui_view.get(); }
+
+    sf::RenderWindow& Game::get_window() {
+        return *window;
+    }
+
+    K::Loader& Game::get_loader() {
+        return *loader;
+    }
 }

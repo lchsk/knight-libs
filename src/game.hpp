@@ -4,9 +4,10 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "../src/loader.hpp"
+
 namespace K {
-class Game {
-  public:
+struct Game {
     Game();
 
     void set_main_view(sf::View &&);
@@ -17,7 +18,13 @@ class Game {
     sf::View *get_main_view() const;
     sf::View *get_gui_view() const;
 
-  private:
+    sf::RenderWindow& get_window();
+    K::Loader& get_loader();
+
+    std::unique_ptr<sf::RenderWindow> window;
+    std::unique_ptr<K::Loader> loader;
+
+
     std::unique_ptr<sf::View> minimap_view;
     std::unique_ptr<sf::View> main_view;
     std::unique_ptr<sf::View> gui_view;
