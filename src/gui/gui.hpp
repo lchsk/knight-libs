@@ -37,6 +37,14 @@ struct Button : public Widget {
     sf::Color pressed_color = sf::Color::White;
     sf::Color hover_color = sf::Color::White;
 
+    void set_position(const K::Point &p) {
+        for (auto &anim_item : animations) {
+            anim_item.second.set_position(p.x, p.y);
+        }
+
+        update_text_position();
+    }
+
     void update(const sf::Time &delta, const sf::Vector2f &mouse_pos,
                 sf::Event &event) {
         animations[active_animation].update(delta);
@@ -84,7 +92,11 @@ struct Button : public Widget {
 
     void set_text(const std::string &str) {
         text.setString(str);
+        update_text_position();
+    }
 
+  private:
+    void update_text_position() {
         const auto &bounds = animations[active_animation].get_sprite_bounds();
         const auto &pos = animations[active_animation].get_position();
         const auto &bounds_text = text.getGlobalBounds();
@@ -92,8 +104,6 @@ struct Button : public Widget {
         text.setPosition(pos.x + bounds.width / 2 - bounds_text.width / 2,
                          pos.y + bounds.height / 2 - bounds_text.height / 2);
     }
-
-  private:
     bool check_bounds(const sf::Vector2f &pos) {
         const auto &bounds = animations[active_animation].get_sprite_bounds();
 
@@ -104,9 +114,33 @@ struct Button : public Widget {
     bool mouse_pressed_for_release = false;
 };
 
-class Grid {
-  public:
+struct Grid {
+    K::Point window_size;
+    K::Point grid_size;
+
+    void init_grid(const K::Point &ws, const K::Point &gs) {
+        window_size = ws;
+        grid_size = gs;
+
+        grid_unit.x = window_size.x / grid_size.x;
+        grid_unit.y = window_size.y / grid_size.y;
+    }
+
+    K::Point get_position(const K::Point &grid_pos) {
+        if (grid_pos.x < 0 or grid_pos.y < 0 or grid_pos.x >= grid_size.x or
+            grid_pos.y >= grid_size.y) {
+            throw std::runtime_error("grid position is not valid");
+        }
+
+        K::Point pos;
+        pos.x = grid_unit.x * grid_pos.x;
+        pos.y = grid_unit.y * grid_pos.y;
+
+        return pos;
+    }
+
   private:
+    K::Point grid_unit;
 };
 
 class Gui {
@@ -138,6 +172,7 @@ class Gui {
 
     std::vector<ecs::Entity *> widgets;
     ecs::System system;
+    K::Grid grid;
 
   private:
 };
