@@ -76,7 +76,7 @@ void Animation::set_origin(double x, double y) {
 
 const K::Point Animation::get_sprite_size() const {
     if (frames.empty()) {
-        throw "no frames in animation";
+        return K::Point(0, 0);
     }
 
     const auto bounds = frames[0].getLocalBounds();
@@ -86,7 +86,7 @@ const K::Point Animation::get_sprite_size() const {
 
 const sf::FloatRect Animation::get_sprite_bounds() const {
     if (frames.empty()) {
-        throw "no frames in animation";
+        return sf::FloatRect(0, 0, 0, 0);
     }
 
     const auto bounds = frames[0].getGlobalBounds();
@@ -106,7 +106,7 @@ void Animation::stop() {
 }
 
 void Animation::render(sf::RenderWindow &window) {
-    if (visible) {
+    if (visible and !frames.empty()) {
         window.draw(frames[current_frame]);
     }
 }
