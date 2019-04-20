@@ -32,6 +32,7 @@ class Animation {
     void set_visible(bool);
 
     const K::Point get_sprite_size() const;
+    const sf::FloatRect get_sprite_bounds() const;
 
     bool is_looping() const;
     void set_loop(bool);

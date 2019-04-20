@@ -83,6 +83,17 @@ const K::Point Animation::get_sprite_size() const {
 
     return K::Point(bounds.width, bounds.height);
 }
+
+const sf::FloatRect Animation::get_sprite_bounds() const {
+    if (frames.empty()) {
+        throw "no frames in animation";
+    }
+
+    const auto bounds = frames[0].getGlobalBounds();
+
+    return bounds;
+}
+
 const sf::Vector2f &Animation::get_position() const { return position; }
 
 const sf::Vector2f &Animation::get_scale() const { return scale; }
