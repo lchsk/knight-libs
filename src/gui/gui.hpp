@@ -170,7 +170,31 @@ class Gui {
         }
     }
 
-    std::vector<ecs::Entity *> widgets;
+    void create_button(const std::string &identifier) {
+        auto e = system.create();
+        system.add<K::Button>(e);
+
+        widgets[identifier] = e;
+
+        auto b = get_button(identifier);
+        b->active_animation = "default";
+    }
+
+    void set_button_style(const std::string &identifier,
+                          const K::Loader &loader, const std::string &font,
+                          int text_size) {
+        auto b = get_button(identifier);
+        b->text.setFont(loader.get_font(font));
+        b->text.setCharacterSize(text_size);
+    }
+
+    K::Button *get_button(const std::string &identifier) {
+        auto e = widgets.at(identifier);
+
+        return e->get<K::Button>().get_value();
+    }
+
+    std::unordered_map<std::string, ecs::Entity *> widgets;
     ecs::System system;
     K::Grid grid;
 
