@@ -28,8 +28,8 @@ set(CMAKE_CXX_STANDARD 17)
 # Source code files, all .hpp and .cpp files from src/ directory are included
 # file(GLOB SOURCES "src/*.hpp" "src/*.cpp")
 
-# Executable name
-add_executable(example_animation examples/animation.cpp src/animation.cpp src/loader.cpp)
+add_executable(example_animation src/hex.cpp examples/animation.cpp src/animation.cpp src/loader.cpp)
+add_executable(example_map src/hex.cpp examples/map.cpp src/animation.cpp src/loader.cpp src/hex_map.cpp src/pathfinding.cpp src/gui/gui.cpp src/game.cpp)
 
 
 ############################################
@@ -59,6 +59,10 @@ target_link_libraries(example_animation
   ${SFML_LIBRARIES}
   )
 
+target_link_libraries(example_map
+  ${SFML_LIBRARIES}
+  )
+
 
 ############################################
 #                                          #
@@ -78,6 +82,7 @@ add_executable(test_loader
 add_executable(test_animation
   tests/test_animation.cpp
   ../src/loader.cpp
+  ../src/hex.cpp
   ../src/animation.cpp
   )
 
