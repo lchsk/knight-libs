@@ -1,5 +1,9 @@
         knight-libs change log
 
-        1.0.0 - 2019-03-28
+        0.2.0 - 2019-04-25
+
+        * Added the following libraries: animation, game, gui, hex, hex_map, loader, pathfinding, simple_ecs
+
+        0.1.0 - 2019-03-28
 
         * Create new project
